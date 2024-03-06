@@ -1,17 +1,22 @@
-name: Build & Deploy
+name: Deploy to DigitalOcean Droplet
+
 on:
   push:
-    branches: [main]
+    branches:
+      - main  # Ou sua branch de preferência
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: copy file via ssh key
-        uses: appleboy/scp-action@v0.1.7
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      
+      - name: Setup SSH
+        uses: webfactory/ssh-agent@v0.5.3
         with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USERNAME }}
-          key: ${{ secrets.SSH_KEY }}
-          source: "git clone git@github.com:thecogmel/deploy-test.git"
-          target: "/"
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+      
+      - name: Deploy to Digital Ocean
+        run: |
+          ssh -o StrictHostKeyChecking=no root@24.199.118.55 "cd / && git pull && your deployment commands"
