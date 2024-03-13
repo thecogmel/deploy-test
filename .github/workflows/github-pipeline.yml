@@ -1,22 +1,19 @@
-name: Deploy to DigitalOcean Droplet
+name: Continuos Integration
 
-on:
-  push:
-    branches:
-      - main  # Ou sua branch de preferência
+on: pull_request
 
 jobs:
-  deploy:
+  continuos-integration:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-      
-      - name: Setup SSH
-        uses: webfactory/ssh-agent@v0.5.3
+      - uses: actions/checkout@v3
+      - name: Using Node.js
+        uses: actions/setup-node@v2
         with:
-          key: ${{ secrets.SSH_KEY }}
-      
-      - name: Deploy to Digital Ocean
+          node-version: 16.
+      - name: run install, build and test
         run: |
-          ssh -o StrictHostKeyChecking=no root@24.199.118.55 "cd / && git pull && your deployment commands"
+          npm install
+          npm run build 
+          npm run test
