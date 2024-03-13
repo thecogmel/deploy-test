@@ -15,8 +15,6 @@ jobs:
           ssh-key: ${{ secrets.SSH_KEY }}
       - name: run install, build and test
         run: |
-          git clone git@github.com:thecogmel/deploy-test.git
-          cd deploy-test
           npm install
           npm run build 
           npm run test
