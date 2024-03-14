@@ -19,4 +19,4 @@ jobs:
 
       - name: Deploy to Digital Ocean
         run: |
-          ssh -o StrictHostKeyChecking=no root@YOUR_DROPLET_IP "cd . && git pull origin main && npm install && npm run build && pm2 restart all"
+          ssh -o StrictHostKeyChecking=no root@${{ secrets.SSH_HOST }} "cd . && git pull origin main && npm install && npm run build && pm2 restart all"
