@@ -18,6 +18,7 @@ jobs:
           script: |
             eval `ssh-agent -s`
             ssh-add ~/.ssh/id_rsa
+            password
             rm -rf test
             mkdir test
             cd test
