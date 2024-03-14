@@ -16,6 +16,8 @@ jobs:
           key: ${{secrets.SSH_KEY}}
           passphrase: ${{ secrets.SSH_PASSPHRASE }}
           script: |
+            eval `ssh-agent -s`
+            ssh-add ~/.ssh/id_rsa
             rm -rf test
             mkdir test
             cd test
