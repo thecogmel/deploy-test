@@ -1,27 +1,24 @@
-name: Continuos Integration
-
-on: push
+name: Deploy to DigitalOcean Droplet
+'on':
+  push:
+    branches:
+      - main
 
 jobs:
-  continuos-integration:
+  deploy:
     runs-on: ubuntu-latest
-
     steps:
-      - uses: actions/checkout@v4.1.1
-      - name: Build & Deploy
-        env:
-          PRIVATE_KEY: ${{ secrets.SSH_KEY }}
-          HOSTNAME: ${{ secrets.SSH_HOST }}
-          USER_NAME: ${{ secrets.SSH_USERNAME }}
-
-        run: |
-          echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
-          ssh -o StrictHostKeyChecking=no -i private_key ${USER_NAME}@${HOSTNAME} '
-              cd /home/ubuntu/deploy-test &&
-              git checkout main &&
-              git fetch --all &&
-              git reset --hard origin/main &&
-              git pull origin main &&
-              sudo npm i &&
-              sudo npm run build
-            '
+      - name: Deploy to DigitalOcean Droplet
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{secrets.SSH_HOST}}
+          username: ${{secrets.SSH_USERNAME}}
+          key: ${{secrets.SSH_KEY}}
+          script: |
+            export NVM_DIR=~/.nvm
+            source ~/.nvm/nvm.sh
+            rm -rf test
+            mkdir test
+            cd test
+            git clone git@github.com:thecogmel/deploy-test.git
+            echo 'Deployment to digital ocean finished'
